@@ -2,7 +2,6 @@ package az.edu.turing.domain.dao.impl.memory;
 
 import az.edu.turing.domain.dao.abstracts.PassengerDao;
 import az.edu.turing.domain.entity.PassengerEntity;
-import az.edu.turing.exception.AlreadyExistsException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,9 +11,13 @@ import java.util.Optional;
 
 public class PassengerDaoInMemory extends PassengerDao {
 
-    private static final Map<Long, PassengerEntity> PASSENGERS = new HashMap<>();
+    private static Map<Long, PassengerEntity> PASSENGERS;
 
     private static long idCounter = 1;
+
+    public PassengerDaoInMemory() {
+        PASSENGERS = new HashMap<>();
+    }
 
     @Override
     public Collection<PassengerEntity> findAll() {
@@ -23,8 +26,10 @@ public class PassengerDaoInMemory extends PassengerDao {
 
     @Override
     public PassengerEntity create(PassengerEntity passengerEntity) {
-        if (exists(passengerEntity.getName(), passengerEntity.getLastName())) {
-            throw new AlreadyExistsException("Passenger already exists");
+        Optional<PassengerEntity> passenger =
+                findByNameAndLastName(passengerEntity.getName(), passengerEntity.getLastName());
+        if (passenger.isPresent()) {
+            return passenger.get();
         }
         passengerEntity.setId(idCounter++);
         PASSENGERS.put(passengerEntity.getId(), passengerEntity);
@@ -37,10 +42,15 @@ public class PassengerDaoInMemory extends PassengerDao {
     }
 
     @Override
-    public boolean exists(String name, String lastName) {
+    public Optional<PassengerEntity> findByNameAndLastName(String name, String lastName) {
         return PASSENGERS
                 .values()
                 .stream()
-                .anyMatch(p -> p.getName().equals(name) && p.getLastName().equals(lastName));
+                .filter(e -> e.getName().equals(name) && e.getLastName().equals(lastName))
+                .findFirst();
+    }
+
+    @Override
+    public void saveChanges() {
     }
 }

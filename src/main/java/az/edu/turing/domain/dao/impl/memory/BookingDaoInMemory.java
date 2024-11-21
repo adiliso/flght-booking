@@ -43,4 +43,8 @@ public class BookingDaoInMemory extends BookingDao {
                 || e.getPassengers().stream().anyMatch(p -> p.getName().equals(name) && p.getLastName().equals(lastName)))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void saveChanges() {
+    }
 }

@@ -10,4 +10,6 @@ public interface DAO<E, I> {
     E create(E e);
 
     Optional<E> getById(I id);
+
+    void saveChanges();
 }

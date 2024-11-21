@@ -1,53 +1,64 @@
-package az.edu.turing.domain.dao.impl.memory;
+package az.edu.turing.domain.dao.impl.file;
 
 import az.edu.turing.domain.dao.abstracts.FlightDao;
 import az.edu.turing.domain.entity.FlightEntity;
 import az.edu.turing.model.dto.request.FlightSearchRequest;
+import az.edu.turing.util.FileUtil;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FlightDaoInMemory extends FlightDao {
+public class FlightFileDao extends FlightDao {
 
-    private static final Map<Long, FlightEntity> FLIGHTS = new HashMap<>();
+    private static List<FlightEntity> FLIGHTS;
+    private static FileUtil<FlightEntity> fileUtil;
 
-    private static long idCounter = 1;
+    public FlightFileDao() {
+        fileUtil = new FileUtil<>(System.getenv("FLIGHTS_FILE"));
+        FLIGHTS = fileUtil.readObject();
+    }
 
     @Override
     public List<FlightEntity> findAll() {
-        return new ArrayList<>(FLIGHTS.values());
+        return new ArrayList<>(FLIGHTS);
     }
 
     @Override
     public FlightEntity create(FlightEntity flightEntity) {
-        flightEntity.setId(idCounter++);
-        FLIGHTS.put(flightEntity.getId(), flightEntity);
+        flightEntity.setId(idGenerator());
+        FLIGHTS.add(flightEntity);
         return flightEntity;
     }
 
     @Override
     public Optional<FlightEntity> getById(Long id) {
-        return Optional.ofNullable(FLIGHTS.get(id));
+        return FLIGHTS
+                .stream()
+                .filter(flightEntity -> flightEntity.getId().equals(id))
+                .findFirst();
+    }
+
+    @Override
+    public void saveChanges() {
+        fileUtil.writeObject(FLIGHTS);
     }
 
     @Override
     public List<FlightEntity> findAllInNext24Hours() {
+        LocalDateTime now = LocalDateTime.now();
         return FLIGHTS
-                .values()
                 .stream()
-                .filter(e -> e.getDepartureDateTime().isAfter(LocalDateTime.now()) &&
-                        e.getDepartureDateTime().isBefore(LocalDateTime.now().plusHours(24))).collect(Collectors.toList());
+                .filter(f -> f.getDepartureDateTime().isAfter(now) &&
+                        f.getDepartureDateTime().isBefore(now.plusHours(24)))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<FlightEntity> search(FlightSearchRequest request) {
         return FLIGHTS
-                .values()
                 .stream()
                 .filter(e -> e.getDestinationPoint().equals(request.getDestinationPoint()) &&
                         e.getDepartureDateTime().toLocalDate().equals(request.getDate()) &&
@@ -55,7 +66,10 @@ public class FlightDaoInMemory extends FlightDao {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public void saveChanges() {
+    private long idGenerator() {
+        if (FLIGHTS.isEmpty()) {
+            return 1;
+        }
+        return FLIGHTS.get(FLIGHTS.size() - 1).getId() + 1;
     }
 }
