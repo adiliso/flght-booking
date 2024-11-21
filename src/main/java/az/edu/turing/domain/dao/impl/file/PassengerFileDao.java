@@ -10,13 +10,8 @@ import java.util.Optional;
 
 public class PassengerFileDao extends PassengerDao {
 
-    private static List<PassengerEntity> PASSENGERS;
-    private static FileUtil<PassengerEntity> fileUtil;
-
-    public PassengerFileDao() {
-        fileUtil = new FileUtil<>(System.getenv("PASSENGERS_FILE"));
-        PASSENGERS = fileUtil.readObject();
-    }
+    private static final FileUtil<PassengerEntity> fileUtil = new FileUtil<>(System.getenv("PASSENGERS_FILE"));
+    private static final List<PassengerEntity> PASSENGERS = fileUtil.readObject();
 
     @Override
     public List<PassengerEntity> findAll() {

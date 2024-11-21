@@ -3,6 +3,8 @@ package az.edu.turing;
 import az.edu.turing.domain.dao.abstracts.BookingDao;
 import az.edu.turing.domain.dao.abstracts.FlightDao;
 import az.edu.turing.domain.dao.abstracts.PassengerDao;
+import az.edu.turing.domain.dao.impl.file.BookingFileDao;
+import az.edu.turing.domain.dao.impl.file.FlightFileDao;
 import az.edu.turing.domain.dao.impl.file.PassengerFileDao;
 import az.edu.turing.domain.dao.impl.memory.BookingDaoInMemory;
 import az.edu.turing.domain.dao.impl.memory.FlightDaoInMemory;
@@ -20,24 +22,40 @@ public class App {
 
 
     public static void main(String[] args) {
-        PassengerFileDao passengerDao = new PassengerFileDao();
-//        FlightDao flightDao = new FlightDaoInMemory();
-//        BookingDao bookingDao = new BookingDaoInMemory();
-//
-//        FlightEntity flight = new FlightEntity(LocalDateTime.now(), "Baku", 60);
+        PassengerDao passengerDao =
+//                new PassengerDaoInMemory();
+                new PassengerFileDao();
+
+        FlightDao flightDao =
+//                new FlightDaoInMemory();
+                new FlightFileDao();
+
+        BookingDao bookingDao =
+//                new BookingDaoInMemory();
+                new BookingFileDao();
+
+        FlightEntity flight = new FlightEntity(LocalDateTime.now(), "Baku", 60);
+        flightDao.create(flight);
 
         PassengerEntity passenger = new PassengerEntity("Adil", "Ismayilov");
         PassengerEntity passenger1 = new PassengerEntity("Parviz", "Muslumov");
-
-//        List<PassengerEntity> passengers = new ArrayList<>();
-//        passengers.add(passenger);
-//
-//        BookingEntity booking = new BookingEntity(flight, passenger, passengers, true);
-
         passengerDao.create(passenger);
         passengerDao.create(passenger1);
+
+        List<PassengerEntity> passengers = new ArrayList<>();
+        passengers.add(passenger);
+        passengers.add(passenger1);
+
+        BookingEntity booking = new BookingEntity(flight, passenger, passengers, true);
+        bookingDao.create(booking);
+
         passengerDao.saveChanges();
-        System.out.println(passengerDao.findAll());
+        flightDao.saveChanges();
+        bookingDao.saveChanges();
+
+//        System.out.println(passengerDao.findAll());
+        System.out.println(flightDao.findAll());
+//        System.out.println(bookingDao.findAll());
     }
 
 }

@@ -13,13 +13,8 @@ import java.util.stream.Collectors;
 
 public class FlightFileDao extends FlightDao {
 
-    private static List<FlightEntity> FLIGHTS;
-    private static FileUtil<FlightEntity> fileUtil;
-
-    public FlightFileDao() {
-        fileUtil = new FileUtil<>(System.getenv("FLIGHTS_FILE"));
-        FLIGHTS = fileUtil.readObject();
-    }
+    private static final FileUtil<FlightEntity> fileUtil = new FileUtil<>(System.getenv("FLIGHTS_FILE"));
+    private static final List<FlightEntity> FLIGHTS = fileUtil.readObject();
 
     @Override
     public List<FlightEntity> findAll() {

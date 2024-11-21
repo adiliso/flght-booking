@@ -2,6 +2,7 @@ package az.edu.turing.domain.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public class BookingEntity implements Serializable {
 
@@ -27,8 +28,6 @@ public class BookingEntity implements Serializable {
         this.passengers = passengers;
         this.isActive = true;
     }
-
-
 
     public Long getId() {
         return id;
@@ -68,6 +67,19 @@ public class BookingEntity implements Serializable {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        BookingEntity booking = (BookingEntity) object;
+        return Objects.equals(id, booking.id) && Objects.equals(flight, booking.flight) && Objects.equals(createdBy, booking.createdBy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, flight, createdBy);
     }
 
     @Override
