@@ -2,7 +2,7 @@ package az.edu.turing.domain.dao.impl.file;
 
 import az.edu.turing.domain.dao.abstracts.PassengerDao;
 import az.edu.turing.domain.entity.PassengerEntity;
-import az.edu.turing.util.FileUtil;
+import az.edu.turing.util.FileDaoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public class PassengerFileDao extends PassengerDao {
 
-    private static final FileUtil<PassengerEntity> fileUtil = new FileUtil<>(System.getenv("PASSENGERS_FILE"));
-    private static final List<PassengerEntity> PASSENGERS = fileUtil.readObject();
+    private static final FileDaoUtil<PassengerEntity> FILE_DAO_UTIL = new FileDaoUtil<>(System.getenv("PASSENGERS_FILE"));
+    private static final List<PassengerEntity> PASSENGERS = FILE_DAO_UTIL.readObject();
 
     @Override
     public List<PassengerEntity> findAll() {
@@ -48,7 +48,7 @@ public class PassengerFileDao extends PassengerDao {
 
     @Override
     public void saveChanges() {
-        fileUtil.writeObject(PASSENGERS);
+        FILE_DAO_UTIL.writeObject(PASSENGERS);
     }
 
     private long idGenerator() {
