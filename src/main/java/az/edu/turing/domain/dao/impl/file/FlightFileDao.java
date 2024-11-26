@@ -3,7 +3,7 @@ package az.edu.turing.domain.dao.impl.file;
 import az.edu.turing.domain.dao.abstracts.FlightDao;
 import az.edu.turing.domain.entity.FlightEntity;
 import az.edu.turing.model.dto.request.FlightSearchRequest;
-import az.edu.turing.util.FileUtil;
+import az.edu.turing.util.FileDaoUtil;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 public class FlightFileDao extends FlightDao {
 
-    private static final FileUtil<FlightEntity> fileUtil = new FileUtil<>(System.getenv("FLIGHTS_FILE"));
-    private static final List<FlightEntity> FLIGHTS = fileUtil.readObject();
+    private static final FileDaoUtil<FlightEntity> FILE_DAO_UTIL = new FileDaoUtil<>(System.getenv("FLIGHTS_FILE"));
+    private static final List<FlightEntity> FLIGHTS = FILE_DAO_UTIL.readObject();
 
     @Override
     public List<FlightEntity> findAll() {
@@ -38,7 +38,7 @@ public class FlightFileDao extends FlightDao {
 
     @Override
     public void saveChanges() {
-        fileUtil.writeObject(FLIGHTS);
+        FILE_DAO_UTIL.writeObject(FLIGHTS);
     }
 
     @Override

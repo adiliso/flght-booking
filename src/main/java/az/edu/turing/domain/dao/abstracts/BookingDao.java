@@ -7,5 +7,9 @@ import java.util.Collection;
 
 public abstract class BookingDao implements DAO<BookingEntity, Long> {
 
-    public abstract Collection<BookingEntity>  findAllByPassengerNameAndSurname(String name, String lastName);
+    public abstract Collection<BookingEntity> findAllByPassengerId(long passengerId);
+
+    public abstract boolean cancelBooking(long bookingId);
+
+    public abstract boolean existsById(long id);
 }

@@ -2,6 +2,7 @@ package az.edu.turing.domain.dao.impl.memory;
 
 import az.edu.turing.domain.dao.abstracts.BookingDao;
 import az.edu.turing.domain.entity.BookingEntity;
+import az.edu.turing.exception.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,16 +36,31 @@ public class BookingDaoInMemory extends BookingDao {
     }
 
     @Override
-    public List<BookingEntity> findAllByPassengerNameAndSurname(String name, String lastName) {
+    public List<BookingEntity> findAllByPassengerId(long passengerId) {
         return BOOKINGS
                 .values()
                 .stream()
-                .filter(e -> (e.getCreatedBy().getName().equals(name) && e.getCreatedBy().getLastName().equals(lastName))
-                || e.getPassengers().stream().anyMatch(p -> p.getName().equals(name) && p.getLastName().equals(lastName)))
-                .collect(Collectors.toList());
+                .filter(e -> e.getCreatedBy().getId() == passengerId ||
+                        e.getPassengers()
+                                .stream()
+                                .anyMatch(p -> p.getId() == passengerId)).collect(Collectors.toList());
     }
 
     @Override
     public void saveChanges() {
+    }
+
+    @Override
+    public boolean cancelBooking(long bookingId) {
+        if (existsById(bookingId)) throw new NotFoundException("Booking with id " + bookingId + " not found");
+
+        if (!BOOKINGS.get(bookingId).getActive()) return false;
+        BOOKINGS.get(bookingId).setActive(false);
+        return true;
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return BOOKINGS.containsKey(id);
     }
 }

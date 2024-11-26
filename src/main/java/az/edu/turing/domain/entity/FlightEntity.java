@@ -29,6 +29,15 @@ public class FlightEntity implements Serializable {
         this.freeSeats = totalSeats;
     }
 
+    public FlightEntity
+            (Long id, LocalDateTime departureDateTime, String destinationPoint, Integer totalSeats, Integer freeSeats) {
+        this.id = id;
+        this.departureDateTime = departureDateTime;
+        this.destinationPoint = destinationPoint;
+        this.totalSeats = totalSeats;
+        this.freeSeats = freeSeats;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,11 +1,9 @@
 package az.edu.turing.domain.dao.impl.file;
 
 import az.edu.turing.domain.dao.abstracts.BookingDao;
-import az.edu.turing.domain.dao.abstracts.PassengerDao;
 import az.edu.turing.domain.entity.BookingEntity;
-import az.edu.turing.domain.entity.PassengerEntity;
 import az.edu.turing.exception.NotFoundException;
-import az.edu.turing.util.FileUtil;
+import az.edu.turing.util.FileDaoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +12,8 @@ import java.util.stream.Collectors;
 
 public class BookingFileDao extends BookingDao {
 
-    private static final FileUtil<BookingEntity> fileUtil = new FileUtil<>(System.getenv("BOOKINGS_FILE"));
-    private static final List<BookingEntity> BOOKINGS = fileUtil.readObject();
+    private static final FileDaoUtil<BookingEntity> FILE_DAO_UTIL = new FileDaoUtil<>(System.getenv("BOOKINGS_FILE"));
+    private static final List<BookingEntity> BOOKINGS = FILE_DAO_UTIL.readObject();
 
     @Override
     public List<BookingEntity> findAll() {
@@ -39,24 +37,17 @@ public class BookingFileDao extends BookingDao {
 
     @Override
     public void saveChanges() {
-        fileUtil.writeObject(BOOKINGS);
+        FILE_DAO_UTIL.writeObject(BOOKINGS);
     }
 
     @Override
-    public List<BookingEntity> findAllByPassengerNameAndSurname(String name, String lastName) throws NotFoundException {
-        PassengerDao passengerDao = new PassengerFileDao();
-        Optional<PassengerEntity> optionalPassenger = passengerDao.findByNameAndLastName(name, lastName);
-        if (!optionalPassenger.isPresent()) {
-            throw new NotFoundException("Passenger not found");
-        }
-        PassengerEntity passenger = optionalPassenger.get();
+    public List<BookingEntity> findAllByPassengerId(long passengerId) {
         return BOOKINGS
                 .stream()
-                .filter(e -> e.getCreatedBy().equals(passenger) ||
+                .filter(e -> e.getCreatedBy().getId() == passengerId ||
                         e.getPassengers()
                                 .stream()
-                                .anyMatch(p -> p.equals(passenger)))
-                .collect(Collectors.toList());
+                                .anyMatch(p -> p.getId() == passengerId)).collect(Collectors.toList());
     }
 
     private long idGenerator() {
@@ -64,5 +55,23 @@ public class BookingFileDao extends BookingDao {
             return 1;
         }
         return BOOKINGS.get(BOOKINGS.size() - 1).getId() + 1;
+    }
+
+    @Override
+    public boolean cancelBooking(long bookingId) {
+        if (existsById(bookingId)) throw new NotFoundException("Booking with id " + bookingId + " not found");
+
+        for (BookingEntity booking : BOOKINGS) {
+            if (!booking.getActive()) return false;
+            booking.setActive(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean existsById(long id) {
+        return BOOKINGS.
+                stream().
+                anyMatch(p -> p.getId() == id);
     }
 }

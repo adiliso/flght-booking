@@ -14,6 +14,13 @@ public class BookingEntity implements Serializable {
     private List<PassengerEntity> passengers;
     private Boolean isActive;
 
+    public BookingEntity(Long id, FlightEntity flight, PassengerEntity createdBy, Boolean isActive) {
+        this.id = id;
+        this.flight = flight;
+        this.createdBy = createdBy;
+        this.isActive = isActive;
+    }
+
     public BookingEntity(FlightEntity flight, PassengerEntity createdBy, List<PassengerEntity> passengers, Boolean isActive) {
         this.flight = flight;
         this.createdBy = createdBy;

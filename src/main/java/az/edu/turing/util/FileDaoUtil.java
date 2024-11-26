@@ -12,11 +12,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileUtil<T> {
+public class FileDaoUtil<T> {
 
     private final Path path;
 
-    public FileUtil(String path) {
+    public FileDaoUtil(String path) {
         this.path = Paths.get(path);
     }
 
