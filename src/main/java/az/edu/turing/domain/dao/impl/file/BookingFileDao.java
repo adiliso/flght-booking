@@ -8,6 +8,7 @@ import az.edu.turing.util.FileDaoUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BookingFileDao extends BookingDao {
@@ -41,13 +42,14 @@ public class BookingFileDao extends BookingDao {
     }
 
     @Override
-    public List<BookingEntity> findAllByPassengerId(long passengerId) {
+    public Set<BookingEntity> findAllByPassengerId(long passengerId) {
         return BOOKINGS
                 .stream()
                 .filter(e -> e.getCreatedBy().getId() == passengerId ||
                         e.getPassengers()
                                 .stream()
-                                .anyMatch(p -> p.getId() == passengerId)).collect(Collectors.toList());
+                                .anyMatch(p -> p.getId() == passengerId))
+                .collect(Collectors.toSet());
     }
 
     private long idGenerator() {

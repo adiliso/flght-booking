@@ -7,9 +7,9 @@ import az.edu.turing.exception.NotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BookingDaoInMemory extends BookingDao {
@@ -36,14 +36,15 @@ public class BookingDaoInMemory extends BookingDao {
     }
 
     @Override
-    public List<BookingEntity> findAllByPassengerId(long passengerId) {
+    public Set<BookingEntity> findAllByPassengerId(long passengerId) {
         return BOOKINGS
                 .values()
                 .stream()
                 .filter(e -> e.getCreatedBy().getId() == passengerId ||
                         e.getPassengers()
                                 .stream()
-                                .anyMatch(p -> p.getId() == passengerId)).collect(Collectors.toList());
+                                .anyMatch(p -> p.getId() == passengerId))
+                .collect(Collectors.toSet());
     }
 
     @Override
