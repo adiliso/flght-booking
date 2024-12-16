@@ -124,16 +124,17 @@ public class BookingDaoPostgres extends BookingDao {
 
     @Override
     public Set<BookingEntity> findAllByPassengerId(long passengerId) {
-        String query = "SELECT b.id, b.flight_id, b.created_by, b.is_active" +
+        String query = "SELECT b.id, b.flight_id, b.created_by, b.is_active " +
                 "FROM bookings b" +
                 "         LEFT JOIN bookings_passengers bp on b.id = bp.booking_id" +
-                "         LEFT JOIN passengers p on bp.passenger_id = p.id" +
+                "         LEFT JOIN passengers p on bp.passenger_id = p.id " +
                 "where created_by = ? OR p.id = ?;";
         Set<BookingEntity> bookings = new HashSet<>();
         try (Connection connection = postgresConfig.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setLong(1, passengerId);
+            ps.setLong(2, passengerId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 bookings.add(resultSetToEntity(rs));
@@ -148,9 +149,9 @@ public class BookingDaoPostgres extends BookingDao {
 
     @Override
     public boolean cancelBooking(long bookingId) {
-        if (existsById(bookingId)) throw new NotFoundException("Booking with id " + bookingId + " does not exist");
+        if (!existsById(bookingId)) throw new NotFoundException("Booking with id " + bookingId + " does not exist");
 
-        String query = "UPDATE bookings SET is_active = true WHERE id = ?;";
+        String query = "UPDATE bookings SET is_active = false WHERE id = ?;";
         try (Connection connection = postgresConfig.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
 

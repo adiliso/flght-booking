@@ -22,22 +22,29 @@ public class BookingServiceImpl implements BookingService {
     private final BookingDao bookingDao;
     private final BookingMapper mapper;
 
-    public BookingServiceImpl(BookingDao bookingDao, BookingMapper mapper) {
+    public BookingServiceImpl(BookingDao bookingDao) {
         this.bookingDao = bookingDao;
-        this.mapper = mapper;
+        this.mapper = new BookingMapper();
     }
 
     @Override
     public BookingResponse create(BookingCreateRequest request) {
+        if (request.getPassengers().isEmpty()) throw new NotFoundException("Passengers cannot be empty");
         FlightDao flightDao = new FlightDaoPostgres();
         PassengerDao passengerDao = new PassengerDaoPostgres();
 
         BookingEntity booking = new BookingEntity(
-                flightDao.getById(request.getFlightId()).get(),
-                passengerDao.findByNameAndLastName(request.getCreatedBy()[0], request.getCreatedBy()[1]).get(),
+                flightDao.getById(request.getFlightId()).orElseThrow(NotFoundException::new),
+                passengerDao.findByNameAndLastName(request.getCreatedBy()[0], request.getCreatedBy()[1])
+                        .orElse(passengerDao.create(new PassengerEntity(
+                                request.getCreatedBy()[0],
+                                request.getCreatedBy()[1]))),
                 request.getPassengers()
                         .stream()
-                        .map(s -> passengerDao.findByNameAndLastName(s[0], s[1]).get())
+                        .map(s -> passengerDao.findByNameAndLastName(s[0], s[1])
+                                .orElse(passengerDao.create(new PassengerEntity(
+                                        s[0],
+                                        s[1]))))
                         .collect(Collectors.toList())
         );
 

@@ -22,7 +22,7 @@ public class PassengerDaoPostgres extends PassengerDao {
         this.postgresConfig = new PostgresConfig();
 
         try (Connection connection = postgresConfig.getConnection();
-             PreparedStatement cs = connection.prepareStatement(CREATE_TABLE_PASSENGER)) {
+             PreparedStatement cs = connection.prepareStatement(CREATE_TABLE_PASSENGERS)) {
             cs.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

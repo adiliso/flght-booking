@@ -1,33 +1,27 @@
 package az.edu.turing.model.dto.request;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 public class FlightCreateRequest {
 
-    private String departureDate;
-    private String departureTime;
+    private LocalDateTime dateTime;
     private String destinationPoint;
     private int totalSeats;
 
-    public FlightCreateRequest(String departureDate, String departureTime, String destinationPoint, int totalSeats) {
-        this.departureDate = departureDate;
-        this.departureTime = departureTime;
+    public FlightCreateRequest(LocalDateTime dateTime, String destinationPoint, int totalSeats) {
+        this.dateTime = dateTime;
         this.destinationPoint = destinationPoint;
         this.totalSeats = totalSeats;
     }
 
-    public String getDepartureDate() {
-        return departureDate;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDepartureDate(String departureDate) {
-        this.departureDate = departureDate;
-    }
-
-    public String getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getDestinationPoint() {
