@@ -1,5 +1,8 @@
-package az.edu.turing.controller;
+package az.edu.turing;
 
+import az.edu.turing.controller.BookingController;
+import az.edu.turing.controller.FlightController;
+import az.edu.turing.controller.PassengerController;
 import az.edu.turing.domain.dao.abstracts.BookingDao;
 import az.edu.turing.domain.dao.abstracts.FlightDao;
 import az.edu.turing.domain.dao.abstracts.PassengerDao;
