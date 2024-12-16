@@ -2,12 +2,13 @@ package az.edu.turing.model.dto.constants;
 
 public class PostgresQueries {
 
-    public static String CREATE_TABLE_PASSENGER =
+    public static String CREATE_TABLE_PASSENGERS =
             "CREATE TABLE IF NOT EXISTS passengers" +
                     "(" +
                     "    id        BIGSERIAL PRIMARY KEY," +
                     "    name      VARCHAR(50) NOT NULL," +
-                    "    last_name VARCHAR(50) NOT NULL" +
+                    "    last_name VARCHAR(50) NOT NULL, " +
+                    "    UNIQUE(name, last_name) " +
                     ");";
 
     public static String CREATE_TABLE_FLIGHTS =

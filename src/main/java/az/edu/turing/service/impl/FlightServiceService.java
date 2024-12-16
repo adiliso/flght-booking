@@ -29,8 +29,7 @@ public class FlightServiceService implements FlightService {
     @Override
     public FlightResponse create(FlightCreateRequest request) {
         FlightEntity flight = new FlightEntity(
-                LocalDateTime.of(LocalDate.parse(request.getDepartureDate()),
-                        LocalTime.parse(request.getDepartureTime())),
+                request.getDateTime(),
                 request.getDestinationPoint(),
                 request.getTotalSeats()
         );

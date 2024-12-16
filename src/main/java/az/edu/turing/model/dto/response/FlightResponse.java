@@ -1,14 +1,18 @@
 package az.edu.turing.model.dto.response;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class FlightResponse {
 
     private long id;
-    private String departureDate;
-    private String departureTime;
+    private LocalDate departureDate;
+    private LocalTime departureTime;
     private String destinationPoint;
     private int freeSeats;
 
-    public FlightResponse(long id, String departureDate, String departureTime, String destinationPoint, int freeSeats) {
+    public FlightResponse
+            (long id, LocalDate departureDate, LocalTime departureTime, String destinationPoint, int freeSeats) {
         this.id = id;
         this.departureDate = departureDate;
         this.departureTime = departureTime;
@@ -24,19 +28,19 @@ public class FlightResponse {
         this.id = id;
     }
 
-    public String getDepartureDate() {
+    public LocalDate getDepartureDate() {
         return departureDate;
     }
 
-    public void setDepartureDate(String departureDate) {
+    public void setDepartureDate(LocalDate departureDate) {
         this.departureDate = departureDate;
     }
 
-    public String getDepartureTime() {
+    public LocalTime getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(String departureTime) {
+    public void setDepartureTime(LocalTime departureTime) {
         this.departureTime = departureTime;
     }
 

@@ -8,8 +8,8 @@ public class FlightMapper {
     public FlightResponse toResponse(FlightEntity entity) {
         return new FlightResponse(
                 entity.getId(),
-                entity.getDepartureDateTime().toLocalDate().toString(),
-                entity.getDepartureDateTime().toLocalTime().toString(),
+                entity.getDepartureDateTime().toLocalDate(),
+                entity.getDepartureDateTime().toLocalTime(),
                 entity.getDestinationPoint(),
                 entity.getFreeSeats()
         );

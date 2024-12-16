@@ -9,13 +9,14 @@ public class BookingMapper {
 
     public BookingResponse toResponse(BookingEntity entity) {
         return new BookingResponse(
+                entity.getId(),
                 entity.getFlight().getId(),
                 new String[]{entity.getCreatedBy().getName(), entity.getCreatedBy().getLastName()},
                 entity.getPassengers()
                         .stream()
                         .map(p -> new String[]{p.getName(), p.getLastName()})
                         .collect(Collectors.toList()),
-                entity.getActive()
+                entity.getActive() ? "active" : "not active"
         );
     }
 }

@@ -1,20 +1,29 @@
 package az.edu.turing.model.dto.response;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class BookingResponse {
 
+    private long id;
     private long flight_id;
     private String[] createdBy;
     private List<String[]> passengers;
-    private boolean isActive;
+    private String isActive;
 
-    public BookingResponse(long flight_id, String[] createdBy, List<String[]> passengers, boolean isActive) {
+    public BookingResponse(long id, long flight_id, String[] createdBy, List<String[]> passengers, String isActive) {
+        this.id = id;
         this.flight_id = flight_id;
         this.createdBy = createdBy;
         this.passengers = passengers;
         this.isActive = isActive;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getFlight_id() {
@@ -41,21 +50,27 @@ public class BookingResponse {
         this.passengers = passengers;
     }
 
-    public boolean isActive() {
+    public String isActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(String active) {
         isActive = active;
     }
 
     @Override
     public String toString() {
-        return "BookingResponse{" +
-                "flight_id=" + flight_id +
-                ", createdBy=" + Arrays.toString(createdBy) +
-                ", passengers=" + passengers +
-                ", isActive=" + isActive +
-                '}';
+        String s = String.format("%-15s%-15s%-30s%-30s%-15s\n",
+                id,
+                flight_id,
+                createdBy[0] + " " + createdBy[1],
+                passengers.get(0)[0] + " " + passengers.get(0)[1],
+                isActive);
+        StringBuilder sb = new StringBuilder(s);
+        for (int i = 1; i < passengers.size(); i++) {
+            String[] passenger = passengers.get(i);
+            sb.append(String.format("%-60s%-30s\n", "", passenger[0] + " " + passenger[1]));
+        }
+        return sb.toString();
     }
 }
