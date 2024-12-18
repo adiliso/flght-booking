@@ -9,19 +9,16 @@ import az.edu.turing.model.dto.request.FlightSearchRequest;
 import az.edu.turing.model.dto.response.FlightResponse;
 import az.edu.turing.service.FlightService;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class FlightServiceService implements FlightService {
+public class FlightServiceImpl implements FlightService {
 
     private final FlightDao flightDao;
     private final FlightMapper mapper;
 
-    public FlightServiceService(FlightDao flightDao) {
+    public FlightServiceImpl(FlightDao flightDao) {
         this.flightDao = flightDao;
         mapper = new FlightMapper();
     }

@@ -1,8 +1,6 @@
 package az.edu.turing.model.dto.request;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class FlightCreateRequest {
 
@@ -12,6 +10,12 @@ public class FlightCreateRequest {
 
     public FlightCreateRequest(LocalDateTime dateTime, String destinationPoint, int totalSeats) {
         this.dateTime = dateTime;
+        this.destinationPoint = destinationPoint;
+        this.totalSeats = totalSeats;
+    }
+
+    public FlightCreateRequest(int year, int month, int day, int hh, int mm, String destinationPoint, int totalSeats) {
+        this.dateTime = LocalDateTime.of(year, month, day, hh, mm);
         this.destinationPoint = destinationPoint;
         this.totalSeats = totalSeats;
     }

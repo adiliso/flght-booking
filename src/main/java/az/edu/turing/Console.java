@@ -19,7 +19,7 @@ import az.edu.turing.service.BookingService;
 import az.edu.turing.service.FlightService;
 import az.edu.turing.service.PassengerService;
 import az.edu.turing.service.impl.BookingServiceImpl;
-import az.edu.turing.service.impl.FlightServiceService;
+import az.edu.turing.service.impl.FlightServiceImpl;
 import az.edu.turing.service.impl.PassengerServiceImpl;
 
 import java.time.LocalDate;
@@ -48,7 +48,7 @@ public class Console {
             new BookingDaoPostgres();
 
     private static final PassengerService passengerService = new PassengerServiceImpl(passengerDao);
-    private static final FlightService flightService = new FlightServiceService(flightDao);
+    private static final FlightService flightService = new FlightServiceImpl(flightDao);
     private static final BookingService bookingService = new BookingServiceImpl(bookingDao);
 
     private static final PassengerController passengerController = new PassengerController(passengerService);

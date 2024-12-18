@@ -115,6 +115,24 @@ public class BookingDaoPostgres extends BookingDao {
 
     @Override
     public Optional<BookingEntity> getById(Long id) {
+        String query = "SELECT * FROM bookings WHERE id = ?;";
+
+        Set<BookingEntity> bookings = new HashSet<>();
+
+        try (Connection connection = postgresConfig.getConnection();
+             PreparedStatement pst = connection.prepareStatement(query)) {
+
+            pst.setLong(1, id);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                bookings.add(resultSetToEntity(rs));
+            }
+
+            return resultSetToEntity(bookings, connection).stream().findFirst();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return Optional.empty();
     }
 
